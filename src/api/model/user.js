@@ -9,6 +9,11 @@ const userSchema = new mongoose.Schema({
     password:{
         type:String,
         required:true,
+    },
+    email:{
+        type:String,
+        required:true,
+        match:/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
     }
 },{collection:'user',versionKey:false})
 

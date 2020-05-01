@@ -6,7 +6,7 @@ const dbName = process.env.DB_NAME
 const mongoOptions = {
     useNewUrlParser: true,
     useUnifiedTopology:true,
-    dbName: dbName
+    dbName: dbName,
 }
 const conn = mongoose.connect(mongoURI,mongoOptions,(err)=>{
     console.log(mongoURI)
