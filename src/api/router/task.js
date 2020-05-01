@@ -5,7 +5,7 @@ const User = require('../model/user')
 const mongoose = require('mongoose')
 
 router.get('/',async (req,res,next)=>{
-    let tasks =await Task.find()
+    let tasks =await Task.find().populate('user','username')
     res.status(200).json({
         tasks:tasks
     }) 
@@ -13,13 +13,13 @@ router.get('/',async (req,res,next)=>{
 
 router.get('/:id',async (req,res,next)=>{
     const id = req.params.id
-    let task =await Task.findById(id)
+    let task = await Task.findById(id).populate('user','username  password')
     if (!task){
         res.status(404).json({
             error: "not found"
         })
     }else{
-        res.status(200).json(doc) 
+        res.status(200).json(task) 
   
     }
 })
@@ -28,10 +28,10 @@ router.post('/',async (req,res,next)=>{
     const task = new Task({
         _id: new mongoose.Types.ObjectId(),
         title:req.body.title,
-        userId:req.body.userId,
+        user:req.body.userId,
     })
     
-    let user = await User.findById({_id:task.userId})
+    let user = await User.find({_id:task.userId})
     if (!user){
         return res.status(404).json({
             message: 'User not found'
@@ -53,7 +53,7 @@ router.put('/:id',async (req,res,next)=>{
     const updateOpts = new Task({
         title:req.body.title
     })
-    let task = await Task.findOneAndUpdate({_id:id},{$set :updateOpts},isReturnNewDocs)
+    let task = await Task.findOneAndUpdate({_id:id},{$set :updateOpts},isReturnNewDocs).populate('user','username')
     if (!task){
         return res.status(404).json({
             error:"not found"
@@ -64,7 +64,7 @@ router.put('/:id',async (req,res,next)=>{
 
 router.delete('/:id',async (req,res)=>{
     const id = req.params.id
-    let task = await Task.findByIdAndDelete({_id:id})
+    let task = await Task.findByIdAndDelete({_id:id}).populate('user','username')
     if (!task){
         return res.status(404).json({
             error:"not found"
