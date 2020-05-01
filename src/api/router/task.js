@@ -1,79 +1,76 @@
 const express  = require('express')
 const router = express.Router()
 const Task = require('../model/task')
+const User = require('../model/user')
 const mongoose = require('mongoose')
 
-router.get('/',(req,res,next)=>{
-    Task.find().exec().then(docs=>{
-        const resp ={
-            total:docs.length,
-            tasks:docs
-        }
-        res.status(200).json(resp)
-    }).catch(err=>{
-        res.status(500).json({
-            error: err
-        })
-    })
+router.get('/',async (req,res,next)=>{
+    let tasks =await Task.find()
+    res.status(200).json({
+        tasks:tasks
+    }) 
 })
 
-router.get('/:id',(req,res,next)=>{
+router.get('/:id',async (req,res,next)=>{
     const id = req.params.id
-    Task.findById(id).exec().then(doc=>{
-        if (doc){
-            res.status(200).json(doc)
-        }else{
-            res.status(404).json({
-                error: "Not found"
-            })
-        }
-    }).catch(err=>{
-        res.status(500).json({
-            error: err
+    let task =await Task.findById(id)
+    if (!task){
+        res.status(404).json({
+            error: "not found"
         })
-    })
+    }else{
+        res.status(200).json(doc) 
+  
+    }
 })
 
-router.post('/',(req,res,next)=>{
+router.post('/',async (req,res,next)=>{
     const task = new Task({
         _id: new mongoose.Types.ObjectId(),
         title:req.body.title,
+        userId:req.body.userId,
     })
-    task.save().then(result=>{
-        res.status(200).json({
-            task : result
+    
+    let user = await User.findById({_id:task.userId})
+    if (!user){
+        return res.status(404).json({
+            message: 'User not found'
+        });
+    }
+    let create = await task.save()
+    if (!create){
+        return res.status(400).json({
+            error:"bad request"
         })
-    }).catch(err=>{
-        res.status(500).json({
-            error : err
-        })
-    })
+    }
+    res.status(200).json(create)
 })
-router.put('/:id',(req,res,next)=>{
+
+router.put('/:id',async (req,res,next)=>{
     const id = req.params.id
 
     const isReturnNewDocs = {new:true,useFindAndModify:false}
     const updateOpts = new Task({
         title:req.body.title
     })
-    Task.findOneAndUpdate({_id:id},{$set :updateOpts},isReturnNewDocs)
-        .exec().then(doc=>{
-            res.status(200).json(doc)
-        }).catch(err=>{
-            res.status(500).json({
-                error:err
-            })
-    })
-})
-router.delete('/:id',(req,res)=>{
-    const id = req.params.id
-    Task.findByIdAndDelete({_id:id}).exec().then(result=>{
-        res.status(200).json(result)
-    }).catch(err=>{
-        res.status(500).json({
-            error: err
+    let task = await Task.findOneAndUpdate({_id:id},{$set :updateOpts},isReturnNewDocs)
+    if (!task){
+        return res.status(404).json({
+            error:"not found"
         })
-    })
+    }
+    res.status(200).json(task)
+})
+
+router.delete('/:id',async (req,res)=>{
+    const id = req.params.id
+    let task = await Task.findByIdAndDelete({_id:id})
+    if (!task){
+        return res.status(404).json({
+            error:"not found"
+        })
+    }
+    res.status(200).json(result)
 })
 
 

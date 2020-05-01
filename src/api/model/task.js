@@ -5,6 +5,10 @@ const taskSchema = new mongoose.Schema({
     title:{
         type:String,
         required:true,
+    },
+    userId:{
+        type:String,
+        ref: 'user'
     }
 },{collection: 'task',versionKey:false})
 
