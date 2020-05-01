@@ -1,13 +1,17 @@
 var mongoose = require('mongoose')
 
-const mongoURI = process.env.MONGO
+const mongoURI = process.env.MONGO_HOST
 const dbName = process.env.DB_NAME
 
-const conn = mongoose.connect(mongoURI,(err)=>{
+const mongoOptions = {
+    useNewUrlParser: true,
+    useUnifiedTopology:true,
+    dbName: dbName
+}
+const conn = mongoose.connect(mongoURI,mongoOptions,(err)=>{
+    console.log(mongoURI)
     if (err){
         console.log("Error "+err)
-    }else{
-        console.log("Fail to connect database")
     }
 })
 
