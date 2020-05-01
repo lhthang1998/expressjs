@@ -3,6 +3,7 @@ const router = express.Router()
 const User = require('../model/user')
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 router.get('/', async (req, res, next) => {
     res.status(200).json({
@@ -45,9 +46,29 @@ router.post('/sign-up', async (req, res, next) => {
 
 router.post('/login', async (req, res, next) => {
     try {
-
+        let user = await User.findOne({ username: req.body.username })
+        if (!user) {
+            return res.status(404).json({
+                error: "username not found"
+            })
+        }
+        if (!await bcrypt.compare(req.body.password, user.password)) {
+            return res.status(401).json({
+                error: "unauthorized"
+            })
+        } else {
+            const token = jwt.sign({
+                username: user.username,
+                email: user.email,
+            }, "my-secret-key", { expiresIn: "1h" })
+            console.log("OK")
+            res.status(200).json({
+                message: "OK",
+                token: token,
+            })
+        }
     } catch (err) {
-
+        return res.status(500).json(err)
     }
 })
 

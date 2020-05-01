@@ -3,12 +3,12 @@ let express = require('express')
 let app = express()
 
 const morgan = require('morgan')
-const taskRoutes = require('./src/api/router/task')
-const userRoutes = require('./src/api/router/user')
+const taskRoutes = require('./src/app/router/task')
+const userRoutes = require('./src/app/router/user')
 const bodyParser = require('body-parser')
 
 // Init connect database
-const db = require('./src/api/db/db')
+const db = require('./src/app/db/db')
 
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({ extended: false }))
