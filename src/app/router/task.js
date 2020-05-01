@@ -3,17 +3,9 @@ const router = express.Router()
 const Task = require('../model/task')
 const User = require('../model/user')
 const mongoose = require('mongoose')
+const TaskController  = require('../controller/task_controller')
 
-router.get('/', async (req, res, next) => {
-    try {
-        let tasks = await Task.find().populate('user', 'username')
-        res.status(200).json({
-            tasks: tasks
-        })
-    } catch (err) {
-        return res.status(400).json(err)
-    }
-})
+router.get('/', TaskController.tasks_get_all)
 
 router.get('/:id', async (req, res, next) => {
     try {

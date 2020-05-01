@@ -2,13 +2,17 @@ const express = require('express')
 const router = express.Router()
 const User = require('../model/user')
 const mongoose = require('mongoose')
-const bcrypt = require('bcryptjs')
+const utils = require('../../utils/bcrypt')
 const jwt = require('jsonwebtoken')
+const checkAuth =require('../middleware/authentication')
 
-router.get('/', async (req, res, next) => {
-    res.status(200).json({
-        message: 'hh'
-    })
+router.get('/',checkAuth, async (req, res, next) => {
+    try{
+        const users = await User.find()
+        res.status(200).json(users)
+    }catch(err){
+        return res.status(500).json(err)
+    }
 })
 
 router.get('/:id', async (req, res, next) => {
@@ -19,12 +23,8 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/sign-up', async (req, res, next) => {
     try {
-        const hashedPassword = await new Promise((resolve, reject) => {
-            bcrypt.hash(req.body.password, 10, function (err, hash) {
-                if (err) reject(err)
-                resolve(hash)
-            });
-        })
+        console.log(req.body.password)
+        const hashedPassword = await utils.hashPwd(req.body.password)
         const user = new User({
             _id: mongoose.Types.ObjectId(),
             username: req.body.username,
