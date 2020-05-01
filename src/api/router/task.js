@@ -15,7 +15,12 @@ router.get('/:id',(req,res,next)=>{
 })
 
 router.post('/',(req,res,next)=>{
-    
+    const task = {
+        name : req.body.name
+    }
+    res.status(200).json({
+        task : task
+    })
 })
 router.put('/:id',(req,res,next)=>{
     
