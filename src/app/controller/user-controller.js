@@ -7,18 +7,10 @@ const constant = require('../../utils/roles')
 
 exports.get_all_users = async (req, res, next) => {
     try {
-        const neededRoles = [constant.ROLES.ADMIN]
-        const {roles}= req.userData
-        var contain = constant.checkArraysHas(roles,neededRoles)
-        if (!contain){
-            return res.status(403).json({
-                error:"not have permission"
-            })
-        }
         const users = await User.find()
         res.status(200).json(users)
     } catch (err) {
-        return res.status(500).json(err)
+        next(err)
     }
 }
 
@@ -33,13 +25,12 @@ exports.get_user_by_id = async (req, res, next) => {
         }
         res.status(200).json(user)
     } catch (err) {
-        return res.status(500).json(err)
+        next(err)
     }
 }
 
 exports.sign_up = async (req, res, next) => {
     try {
-        console.log(constant.ROLES.length)
         const hashedPassword = await utils.hashPwd(req.body.password)
         const user = new User({
             _id: mongoose.Types.ObjectId(),
@@ -57,7 +48,7 @@ exports.sign_up = async (req, res, next) => {
         }
         res.status(200).json(create)
     } catch (err) {
-        res.status(500).json(err)
+        next(err)
     }
 }
 

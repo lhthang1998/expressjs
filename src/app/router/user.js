@@ -1,10 +1,11 @@
 const express = require('express')
-const checkAuth =require('../middleware/auth')
-const UserController = require('../controller/user_controller')
+const checkAuth =require('../middleware/authorization')
+const UserController = require('../controller/user-controller')
+const constant = require('../../utils/roles')
 
 const router = express.Router()
 
-router.get('/',checkAuth, UserController.get_all_users)
+router.get('/',checkAuth([constant.ROLES.ADMIN,constant.ROLES.USER]), UserController.get_all_users)
 
 router.get('/:id',UserController.get_user_by_id)
 

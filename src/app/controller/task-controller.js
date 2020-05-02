@@ -9,7 +9,7 @@ exports.tasks_get_all = async (req, res, next) => {
             tasks: tasks
         })
     } catch (err) {
-        return res.status(400).json(err)
+        next(err)
     }
 }
 
@@ -26,7 +26,7 @@ exports.tasks_get_by_id = async (req, res, next) => {
 
         }
     } catch (err) {
-        return res.status(400).json(err)
+        next(err)
     }
 }
 
@@ -53,7 +53,7 @@ exports.create_task = async (req, res, next) => {
         }
         res.status(200).json(create)
     } catch (err) {
-        return res.status(400).json(err)
+        next(err)
     }
 }
 
@@ -73,7 +73,7 @@ exports.update_task = async (req, res, next) => {
         }
         res.status(200).json(task)
     } catch (err) {
-        return res.status(500).json(err)
+        next(err)
     }
 }
 
@@ -88,6 +88,6 @@ exports.delete_task = async (req, res) => {
         }
         res.status(200).json(task)
     } catch (err) {
-        return res.status(500).json(err)
+        next(err)
     }
 }

@@ -6,6 +6,7 @@ const morgan = require('morgan')
 const taskRoutes = require('./src/app/router/task')
 const userRoutes = require('./src/app/router/user')
 const bodyParser = require('body-parser')
+const errorHandler =require('./src/app/middleware/error-handle')
 
 // Init connect database
 const db = require('./src/app/db/db')
@@ -22,6 +23,8 @@ app.use((req, res, next) => {
     }
     next()
 })
+// global error handler
+app.use(errorHandler);
 
 app.use('/tasks', taskRoutes)
 app.use('/users', userRoutes)
