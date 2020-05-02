@@ -29,6 +29,7 @@ app.use((req, res, next) => {
 
 
 app.use('/swagger/index.html', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 app.use('/tasks', taskRoutes)
 app.use('/users', userRoutes)
 

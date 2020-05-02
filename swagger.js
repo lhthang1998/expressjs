@@ -1,7 +1,7 @@
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerOptions = {
     // List of files to be processed.
-    apis: ['./app.js'],
+    apis: ['./src/app/router/*.js'],
     // You can also set globs for your apis
     // e.g. './routes/*.js'
     basePath: '/',
@@ -14,6 +14,20 @@ const swaggerOptions = {
             },
             servers: ["http://localhost:8585"],
         },
+        schemes: ['http', 'https'],
+        securityDefinitions: {
+            Bearer: {
+                type: 'apiKey',
+                in: 'header',
+                name: 'Authorization',
+                description: "",
+            }
+        },
+        security: [
+            {
+                Bearer: []
+            }
+        ]
     },
 };
 
