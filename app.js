@@ -2,6 +2,9 @@
 let express = require('express')
 var app = express()
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocs = require('./swagger')
+
 const morgan = require('morgan')
 const taskRoutes = require('./src/app/router/task')
 const userRoutes = require('./src/app/router/user')
@@ -25,6 +28,7 @@ app.use((req, res, next) => {
 })
 
 
+app.use('/swagger/index.html', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/tasks', taskRoutes)
 app.use('/users', userRoutes)
 
