@@ -1,6 +1,6 @@
 // Import
 let express = require('express')
-let app = express()
+var app = express()
 
 const morgan = require('morgan')
 const taskRoutes = require('./src/app/router/task')
@@ -28,10 +28,10 @@ app.use((req, res, next) => {
 app.use('/tasks', taskRoutes)
 app.use('/users', userRoutes)
 
-app.use(express.static(__dirname+'/public'))
+app.use("/template",express.static(__dirname+'/template'))
 app.use((req, res, next) => {
     res.status(404)
-    res.sendFile(__dirname+'/public/index.html')
+    res.sendFile(__dirname+ '/template/index.html')
 })
 
 app.use(handleError)
