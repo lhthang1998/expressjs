@@ -1,9 +1,7 @@
 const express = require('express')
-const router = express.Router()
-const Task = require('../model/task')
-const User = require('../model/user')
-const mongoose = require('mongoose')
 const TaskController = require('../controller/task_controller')
+
+const router = express.Router()
 
 router.get('/', TaskController.tasks_get_all)
 
