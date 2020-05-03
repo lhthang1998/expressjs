@@ -4,6 +4,7 @@ Rest API with ExpressJS, MongoDB
 # Feature
 * CRUD APIs
 * Authentication, Authorization
+* Auto genenrate swagger
 
 # Technologies
 * [Express](https://expressjs.com/)
@@ -16,8 +17,12 @@ Rest API with ExpressJS, MongoDB
   - MONGO_HOST = your host/ localhost:27017
   - DB_NAME = your db name
   
-
+# For more example about swagger annotations
+* Please visit `https://swagger.io/docs/specification/about/`
 # Run
 * `npm install` for download dependencies
 * `npm start`
+
+# Swagger
+* `localhost:{port}/swagger/index.html`
 

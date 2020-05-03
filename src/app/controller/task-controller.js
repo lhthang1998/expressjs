@@ -37,8 +37,7 @@ exports.create_task = async (req, res, next) => {
             title: req.body.title,
             user: req.body.userId,
         })
-
-        let user = await User.find({ _id: task.userId })
+        let user = await User.findOne({ _id: task.user })
         if (!user) {
             return res.status(404).json({
                 message: 'User not found'
@@ -63,8 +62,19 @@ exports.update_task = async (req, res, next) => {
 
         const isReturnNewDocs = { new: true, useFindAndModify: false }
         const updateOpts = new Task({
-            title: req.body.title
+            title: req.body.title,
         })
+
+        if (req.body.userId != undefined) {
+            updateOpts.user = req.body.userId
+            let user = await User.findOne({ _id: mongoose.Types.ObjectId(updateOpts.user) })
+            if (!user) {
+                return res.status(404).json({
+                    message: 'User not found'
+                });
+            }
+        }
+
         let task = await Task.findOneAndUpdate({ _id: id }, { $set: updateOpts }, isReturnNewDocs).populate('user', 'username')
         if (!task) {
             return res.status(404).json({
